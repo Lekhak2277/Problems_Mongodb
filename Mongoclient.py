@@ -8,7 +8,7 @@ client = MongoClient("mongodb://localhost:27017")
 # for i in list(client.list_databases()):
 #     print(i['name'])
 
-print(client.list_database_names())
+# print(client.list_database_names())
 
 database = client['ecommerce_demo']
 
@@ -38,8 +38,8 @@ user_22 = [i for i in database.users.find({'name':'User22'})]
 user_23 = database.users.find_one({'name':'User23'})
 
 
-for i,v in user_23.items():
-    print(i,"=\n",user_23[i])
+# for i,v in user_23.items():
+#     print(i,"=\n",user_23[i])
 
 
     
@@ -47,3 +47,15 @@ for i,v in user_23.items():
 #     print(i)
 #     print(i.keys())
 #     print(i.values())
+
+# print(database.list_collection_names())
+
+
+# print(database.drop_collection('new_collection_2'))
+# print(database.drop_collection('new_collection'))
+
+# print(database.list_collection_names())
+
+
+
+
