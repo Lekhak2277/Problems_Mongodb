@@ -1,2 +1,2 @@
-
-#     print(i,"=\n",user_23[i])
+for i in result:
+#     print(i.get('name'))

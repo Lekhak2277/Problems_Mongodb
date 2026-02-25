@@ -12,6 +12,10 @@ client = MongoClient("mongodb://localhost:27017")
 
 database = client['ecommerce_demo']
 
+db = client['ecommerce_demo']
+# print(db.list_collection_names())
+
+
 
 # print("==========================================================")
 # print(database.create_collection("new_collection"))
@@ -59,3 +63,102 @@ user_23 = database.users.find_one({'name':'User23'})
 
 
 
+# pipeline = [
+#     {
+#         "$lookup":
+#         {
+#             "from":"users",
+#             "localField":"user_id",
+#             "foreignField":"_id",
+#             "as":"users"
+#         },
+#     },
+#     {
+#         "$unwind":"$users"
+#     },
+#     {
+#         "$lookup":
+#         {
+#             "from":"roles",
+#             "localField":"users.role_id",
+#             "foreignField":"_id",
+#             "as":"admin_data"
+#         }
+#     },
+#     {
+#         "$unwind":"$admin_data"
+#     },
+#     {
+#         "$match":
+#         {
+#             "admin_data.name":"admin"
+#         }
+#     }
+
+# ]
+
+
+
+
+
+
+
+pipeline = [
+    {
+        "$lookup":
+        {
+            "from":"users",
+            "localField":"user_id",
+            "foreignField":"_id",
+            "as":"users"
+        },
+    },
+    {
+        "$unwind":"$users"
+    },
+    {
+        "$lookup":
+        {
+            "from":"roles",
+            "localField":"users.role_id",
+            "foreignField":"_id",
+            "as":"admin_data"
+        }
+    },
+    {
+        "$unwind":"$admin_data"
+    },
+    {
+        "$match":
+        {
+            "admin_data.name":"admin"
+        }
+    },
+    {
+        "$project":
+        {
+            "_id":0,
+            "admin":"$admin_data.name",
+            "city":1,
+            "user_name":"$users.name"
+        }
+    },
+
+]
+
+result = list(db.addresses.aggregate(pipeline))
+print(result)
+
+print(result[0])
+
+count = 0
+
+for i in result:
+    count+=1
+    print(i)
+    print(i.get('user_name'))
+    print(i.get("city"))
+    print(i["user_name"])
+    print(i.get("city2","sixtytwo"))
+    break
+print(count)
