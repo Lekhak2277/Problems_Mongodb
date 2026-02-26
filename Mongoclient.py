@@ -162,3 +162,37 @@ for i in result:
     print(i.get("city2","sixtytwo"))
     break
 print(count)
+
+print("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
+# Join users with addresses and show only name and city.
+
+pipeline1 = [
+    {
+    "$lookup":
+    {
+        "from":"addresses",
+        "localField":"_id",
+        "foreignField":"user_id",
+        "as":"udata"
+    },
+
+    },
+    {
+        "$unwind":"$udata"
+    },
+    {
+        "$project":
+        {
+            "_id":0,
+            "name":1,
+            "city":"$udata.city"
+        }
+    }
+
+]
+
+users_name = list(db.users.aggregate(pipeline1))
+for i in users_name:
+    print(i.get('name'))
+
+# print(users_name)
