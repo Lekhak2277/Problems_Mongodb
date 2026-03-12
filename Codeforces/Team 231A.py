@@ -28,8 +28,8 @@ count=0
 for i in range(len(b)):
     if b[i].count(True)>=2:
         count+=1
-    else:
-        continue
+    # else:                         #this else part not necessary
+    #     continue
 
 
     # if b.count(True)>=2:
@@ -37,3 +37,11 @@ for i in range(len(b)):
     # else:
     #     continue
 print(count)
+
+
+m = int(input())
+count_optimized_code_after_using_chatgpt=0
+for i in range(n):
+    if sum(list(map(int,input().split())))>=2:
+        count_optimized_code_after_using_chatgpt+=1
+print(count_optimized_code_after_using_chatgpt)
