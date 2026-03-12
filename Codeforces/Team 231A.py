@@ -45,3 +45,14 @@ for i in range(n):
     if sum(list(map(int,input().split())))>=2:
         count_optimized_code_after_using_chatgpt+=1
 print(count_optimized_code_after_using_chatgpt)
+
+#gemini code
+
+n = int(input())
+b = []
+for i in range(n):
+    a=list(map(int,input().split()))
+    b.append(a)
+
+count = sum(1 for row in b if sum(row)>=2)
+print(count)
