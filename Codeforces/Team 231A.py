@@ -56,3 +56,15 @@ for i in range(n):
 
 count = sum(1 for row in b if sum(row)>=2)
 print(count)
+
+
+
+
+
+n = int(input())
+count=0
+for i in range(n):
+    sum_calculated_while_entering_the_input_itself = sum(map(int,input().split()))
+    if sum_calculated_while_entering_the_input_itself >=2:
+        count+=1
+print(count)
