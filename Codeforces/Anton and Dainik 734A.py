@@ -16,19 +16,31 @@ If Danik won more games than Anton, print "Danik" (without quotes) in the only l
 
 If Anton and Danik won the same number of games, print "Friendship" (without quotes)."""
 
+# n = int(input())
+# s=input().upper()
+# ant=0
+# dan=0
+# for i in s:
+#     if i =='A':
+#         ant+=1
+#     else:
+#         dan+=1
+
+# if ant==dan:
+#     print('Friendship')
+# elif ant>dan:
+#     print("Anton")
+# else:
+#     print("Danik")
+
+
+#OPTIMIZED LOGIC DEEPSEEK
+
 n = int(input())
 s=input().upper()
-ant=0
-dan=0
-for i in s:
-    if i =='A':
-        ant+=1
-    else:
-        dan+=1
 
-if ant==dan:
-    print('Friendship')
-elif ant>dan:
-    print("Anton")
-else:
-    print("Danik")
+ant = sum(1 for i in s if i =='A')
+print(ant)
+dan = n-ant
+print(dan)
+print('friendship' if ant==dan else "Anton" if ant>dan else "Danik")
