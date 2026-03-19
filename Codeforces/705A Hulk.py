@@ -65,6 +65,7 @@ def hulk(n):
 
 # print(hulk(3))
 
+#OPTIMIZED CODE
 
 n= int(input())
 
