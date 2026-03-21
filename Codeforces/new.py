@@ -1,4 +1,4 @@
-n=int(input('enter'))
+n=int(input())
 
 lst_to_join=[]
 odd = ' I hate '
@@ -10,6 +10,4 @@ for i in range(1,n+1):
         lst_to_join.append(odd)
         
 print('that'.join(lst_to_join)+'it')
-
-# print(lst_to_join)
         
