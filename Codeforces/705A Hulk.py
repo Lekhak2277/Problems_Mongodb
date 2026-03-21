@@ -70,3 +70,4 @@ def hulk(n):
 n= int(input())
 
 print(' that '.join(['I Love' if i%2==0 else 'I hate' for i in range(1,n+1)])+' it')
+
