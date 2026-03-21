@@ -121,6 +121,9 @@ q=set(q)
 # for i in q:
 #     new_set.add(i)
     
+#BOTH SOL'S WORK
+
+
 if n==len(p|q):
     print('I become the guy.')
 else:
