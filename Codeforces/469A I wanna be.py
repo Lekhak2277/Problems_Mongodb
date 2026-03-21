@@ -106,3 +106,24 @@ In the second sample, no one can pass level 4.
 #     print('Oh, my keyboard!')
 
 
+n=int(input())
+p=list(map(int,input().split()[1:]))
+q=list(map(int,input().split()[1:]))
+
+p=set(p)
+q=set(q)
+
+ 
+# new_set=set()
+ 
+# for i in p:
+#     new_set.add(i)
+# for i in q:
+#     new_set.add(i)
+    
+if n==len(p|q):
+    print('I become the guy.')
+else:
+    print('Oh, my keyboard!')
+
+
