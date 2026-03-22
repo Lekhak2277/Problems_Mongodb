@@ -23,23 +23,44 @@
 #     print(pair[0], pair[1])
 
 
-n=int(input())
-data = []
+# n=int(input())
+# data = []
 
-print(f"Enter {n} pairs (space-separated values, one pair per line):")
-for i in range(n):
-    # Read each line and split into two integers
-    a = map(int, input().split())
-    print(tuple(a))
-    data.append(a)
+# print(f"Enter {n} pairs (space-separated values, one pair per line):")
+# for i in range(n):
+#     # Read each line and split into two integers
+#     a = map(int, input().split())
+#     print(tuple(a))
+#     data.append(a)
 
-print(data)
+# print(data)
 
 
 # THE LOGIC TO BE USED HERE
 #IF FIRST ELEMENTS ARE SAME LIKE IN THIS CASE IT IS AUTOMATICALLY CHECKS THE SECOND ELEMENT
 #BY DEFAULT NO NEED TO PUT ELSE CONDITION HERE
 
-a=(3,4)
-b=(3,5)
-print(a if a<b else b)
+# a=(3,4)
+# b=(3,5)
+# print(a if a<b else b)
+
+
+# n=int(input())
+# a=list(map(int,input().split()))
+
+# print(tuple(a))
+
+compare=[]
+n=int(input())
+for i in range(n):
+    a=tuple(map(int,input().split()))
+    compare.append(a)
+
+for i in range(n):
+    min_idx=i
+    for j in range(i+1,n):
+        if compare[i]>compare[j]:
+            min_idx=j
+    compare[i],compare[min_idx]=compare[min_idx],compare[i]
+
+print(compare)
