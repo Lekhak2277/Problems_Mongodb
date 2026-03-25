@@ -14,9 +14,10 @@ Explanation: The given array is not sorted.
 
 arr = [90, 80, 100, 70, 40, 30]
 new_arr = sorted(arr)
+another = [90,80,100,70,40,30]
 
 for i in range(len(arr)-1):
-    if new_arr[i]>new_arr[i+1]:
+    if another[i]>another[i+1]:
         print('not sorted')
         break
     
