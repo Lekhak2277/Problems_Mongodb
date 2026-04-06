@@ -17,4 +17,14 @@ while n>0:
     rem = n%10
     sum_d+=rem
     n=n//10
-print(sum_d)
+print(sum_d,"=============================")
+
+new_str = 15
+str_of_new_str = str(new_str)
+print(type(str_of_new_str))
+
+
+sum_converted_to_str=0
+for i in str_of_new_str:
+    sum_converted_to_str+=int(i)
+print(sum_converted_to_str,"+++++++++++++++++++++++++++++++++++++++++++++++++++")
