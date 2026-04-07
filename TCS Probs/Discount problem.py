@@ -12,4 +12,4 @@ else:
     disc=(n/100)*15
     payable_amount=n-disc
 
-print(payable_amount)
+print(f"{payable_amount:.2f}")
