@@ -35,4 +35,4 @@ for i in s:
 
 result = ' '.join(f"{char}{freq}" for char, freq in count.items())
 
-print(result + "git added to keep the incoming file and to see how to edit")
+print(result)
