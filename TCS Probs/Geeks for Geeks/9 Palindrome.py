@@ -12,18 +12,23 @@ Explanation: "abc" does not read the same forwards and backwards, so it is not a
 
 """
 
-s = "abc" 
-news=[]
-for i in s:
-    news.append(i)
-print(news)
+# s = "abc" 
+# news=[]
+# for i in s:
+#     news.append(i)
+# print(news)
 
-news.reverse()
-print(news)
-new_str = ''.join(news)
-print(new_str)
+# news.reverse()
+# print(news)
+# new_str = ''.join(news)
+# print(new_str)
 
-if s==new_str:
-    print(True)
-else:
-    print(False)
+# if s==new_str:
+#     print(True)
+# else:
+#     print(False)
+
+
+lekh = 'string'
+
+
