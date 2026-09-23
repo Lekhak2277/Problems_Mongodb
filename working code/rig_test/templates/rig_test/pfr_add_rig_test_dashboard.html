@@ -1,0 +1,542 @@
+{% extends 'dashboard/layout.html' %} {% block title %}  Add Rig Test
+{% endblock %}
+
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'dashboard/Ftp/textarea.css' %}" >
+
+{% endblock %}
+{% block body %}
+<div class="page-content">
+  <div class="container-fluid">
+    <div class="border border-dashed border-end-0 border-start-0">
+      <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+          <h4 class="mb-sm-0">ADD RIG TEST</h4>
+          <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+              <li class="breadcrumb-item active"><a href="/">Home</a></li>
+              <li class="breadcrumb-item text-primary fw-semibold">
+                Add Rig Test
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-body">
+      <div class="row">
+        <div class="col-6">
+          {% include 'masterdata/main_like_search_box_custom_col.html' %}
+        </div>
+
+      <div class="col-6">
+        <div class="d-flex flex-wrap gap-2" style="float: right;">
+            <div class="col-sm-auto">
+                <div class="d-flex flex-wrap align-items-start gap-2">
+                  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_testrig" style="height: fit-content;">
+                    <i class="ri ri-add-circle-fill align-middle me-2"></i>Add Rig Test
+                  </button>
+                </div>
+            </div>
+        </div>
+      </div>
+
+    </div>
+
+        <div class="row mt-4">
+        <div class="table-responsive">
+
+          <table class="table table-hover" id="myTable">
+            <thead class="table-light text-text-muted">
+              <th class="text-center" style="line-height:2.3;">Sl. No.</th>
+              <th class="text-center height-align">
+                        <strong>Type of Testing</strong>
+                        <span class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown"></span>
+                        <div class="dropdown-menu" style="width:30%;" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item sortBtn hover-hand2" data-sort-order="ascending">
+                            <i class="ri-sort-asc align-bottom me-2"></i>Sort Ascending
+                            </a>
+                            <a class="dropdown-item sortBtn hover-hand2" data-sort-order="descending">
+                            <i class="ri-sort-desc align-bottom me-2"></i>Sort Descending
+                            </a>
+                            <a class="dropdown-item clearFilterBtn mb-2 hover-hand2">
+                            <i class="ri-filter-off-fill align-bottom me-2"></i>Clear Filter
+                            </a>
+                            <div class="search-box search-box-sm activityNumberDiv likeSearchDiv"
+                                style="margin-left:38px;margin-right:10px;">
+                            <input type="text" class="form-control bg-light border-0 likeSearchInput"
+                                    placeholder="Search ...">
+                            <i class="ri-search-line search-icon"></i>
+                            </div>
+                            <div class="text-center mt-2" style="display:none;">
+                            <p>No Results Found</p>
+                            </div>
+                            <div class="col-sm-auto" style="margin-left:30px;padding:10px;"></div>
+                            <button class="btn-sm btn btn-light" style="float:right;margin-right:10px;">Cancel</button>
+                            <button class="btn-sm btn btn-light okBtnLikeSearch" style="float:right;margin-right:10px;width:60px;">Ok</button>
+                        </div>
+              </th>
+              <th class="text-nowrap">
+                        <strong>H/W & S/W Version</strong>
+                        <span class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown"></span>
+                        <div class="dropdown-menu" style="width:30%;" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item sortBtn hover-hand2" data-sort-order="ascending">
+                            <i class="ri-sort-asc align-bottom me-2"></i>Sort Ascending
+                            </a>
+                            <a class="dropdown-item sortBtn hover-hand2" data-sort-order="descending">
+                            <i class="ri-sort-desc align-bottom me-2"></i>Sort Descending
+                            </a>
+                            <a class="dropdown-item clearFilterBtn mb-2 hover-hand2">
+                            <i class="ri-filter-off-fill align-bottom me-2"></i>Clear Filter
+                            </a>
+                            <div class="search-box search-box-sm" style="margin-left:38px;margin-right:10px;">
+                            <input type="text" class="form-control bg-light border-0 jsSearchInput"
+                                    placeholder="Search ...">
+                            <i class="ri-search-line search-icon jsSearchBtn"></i>
+                            </div>
+                            <div class="text-center mt-2" style="display:none;">
+                            <p>No Results Found</p>
+                            </div>
+                            <div class="aircraftDiv columnDataDiv" style="margin-left:30px;padding:10px;"></div>
+                            <button class="btn-sm btn btn-light" style="float:right;margin-right:10px;">Cancel</button>
+                            <button class="btn-sm btn btn-light okBtn" style="float:right;margin-right:10px;width:60px;">Ok</button>
+                        </div>
+              </th>
+
+
+              <!-- Date -->
+              <th class="text-start height-align">
+              <strong>Date</strong>
+              <span class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown"></span>
+              <div class="dropdown-menu" style="width:30%;" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item sortBtn hover-hand2" data-sort-order="ascending">
+                  <i class="ri-sort-asc align-bottom me-2"></i>Sort Ascending
+                  </a>
+                  <a class="dropdown-item sortBtn hover-hand2" data-sort-order="descending">
+                  <i class="ri-sort-desc align-bottom me-2"></i>Sort Descending
+                  </a>
+                  <a class="dropdown-item clearFilterBtn mb-2 hover-hand2">
+                  <i class="ri-filter-off-fill align-bottom me-2"></i>Clear Filter
+                  </a>
+                  <div class="search-box search-box-sm schRefNoDiv likeSearchDiv"
+                      style="margin-left:38px;margin-right:10px;">
+                  <input type="text" class="form-control bg-light border-0 likeSearchInput"
+                          placeholder="Search ...">
+                  <i class="ri-search-line search-icon"></i>
+                  </div>
+                  <div class="text-center mt-2" style="display:none;">
+                  <p>No Results Found</p>
+                  </div>
+              </div>
+              </th>
+
+              <!-- Description -->
+              <th class="text-start height-align">
+              <strong>Description</strong>
+              </th>
+
+
+              <th class="text-start height-align">
+              <strong>Data File No</strong>
+              </th>
+
+              <th class="text-start height-align">
+              <strong>Pil No</strong>
+              </th>
+
+
+              <th class="text-center" style="min-width:100px"><strong>Attachment/s</strong>
+                  <span class="btn btn-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"> </span>
+                  <div class="dropdown-menu" style="width: 30%;" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item sortBtn hover-hand2" data-sort-order="ascending"><i class="ri-sort-asc align-bottom me-2"></i>Sort Ascending</a>
+                      <a class="dropdown-item sortBtn hover-hand2" data-sort-order="descending"><i class="ri-sort-desc align-bottom me-2"></i>Sort Descending</a>
+
+                      <a class="dropdown-item clearFilterBtn mb-2 hover-hand2"><i class="ri-filter-off-fill align-bottom me-2"></i>Clear Filter</a>
+
+
+                      <div class="search-box search-box-sm attachmentsDiv likeSearchDiv" style="margin-left: 38px; margin-right: 10px;">
+                          <input type="text" class="form-control bg-light border-0 likeSearchInput" id="" placeholder="Search ..." />
+                          <i class="ri-search-line search-icon"></i>
+                      </div>
+
+                      <div class="text-center mt-2" id="" style="display: none;">
+                          <p>No Results Found</p>
+                      </div>
+
+
+                      <div style="margin-left: 30px; padding: 10px;" id="" class=" ">
+
+                      <!-- this div not used  -->
+
+                      </div>
+
+                      <button class="btn-sm btn btn-light" style="float: right; margin-right: 10px;">Cancel</button>
+                      <button class="btn-sm btn btn-light okBtnLikeSearch" style="float: right; margin-right: 10px; width: 60px;">Ok</button>
+                  </div>
+              </th>
+
+
+              <!-- Action column -->
+              <th id="action_id" style="line-height:2.3;">Action</th>
+            </thead>
+            <tbody id="Addrigtest">
+                {% for rig in rig_tests %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td class="text-center height-align">
+                        <!-- Debug: rig.id = {{ rig.id }} -->
+                        <a href="{% url 'rig_test_detail' rig.id %}" class="text-primary fw-bold text-decoration-none">{{ rig.type_of_testing }}</a>
+                    </td>
+                    <td class="text-nowrap">
+                        {{ rig.hw_sw }}/{ rig.version }
+                        <span class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown"></span>
+                        <div class="dropdown-menu" style="width:30%;" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item sortBtn hover-hand2" data-sort-order="ascending"><i class="ri-sort-asc align-bottom me-2"></i>Sort Ascending</a>
+                            <a class="dropdown-item sortBtn hover-hand2" data-sort-order="descending"><i class="ri-sort-desc align-bottom me-2"></i>Sort Descending</a>
+                            <a class="dropdown-item clearFilterBtn mb-2 hover-hand2"><i class="ri-filter-off-fill align-bottom me-2"></i>Clear Filter</a>
+                            <div class="search-box search-box-sm" style="margin-left:38px;margin-right:10px;">
+                                <input type="text" class="form-control bg-light border-0 jsSearchInput" placeholder="Search ...">
+                                <i class="ri-search-line search-icon jsSearchBtn"></i>
+                            </div>
+                            <div class="text-center mt-2" style="display:none;">
+                                <p>No Results Found</p>
+                            </div>
+                            <div class="aircraftDiv columnDataDiv" style="margin-left:30px;padding:10px;"></div>
+                            <button class="btn-sm btn btn-light" style="float:right;margin-right:10px;">Cancel</button>
+                            <button class="btn-sm btn btn-light okBtn" style="float:right;margin-right:10px;width:60px;">Ok</button>
+                        </div>
+                    </td>
+                    <th class="text-start height-align">
+                        {{ rig.rig_date|date:"Y-m-d" }}
+                        <span class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown"></span>
+                        <div class="dropdown-menu" style="width:30%;" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item sortBtn hover-hand2" data-sort-order="ascending"><i class="ri-sort-asc align-bottom me-2"></i>Sort Ascending</a>
+                            <a class="dropdown-item sortBtn hover-hand2" data-sort-order="descending"><i class="ri-sort-desc align-bottom me-2"></i>Sort Descending</a>
+                            <a class="dropdown-item clearFilterBtn mb-2 hover-hand2"><i class="ri-filter-off-fill align-bottom me-2"></i>Clear Filter</a>
+                            <div class="search-box search-box-sm schRefNoDiv likeSearchDiv" style="margin-left:38px;margin-right:10px;">
+                                <input type="text" class="form-control bg-light border-0 likeSearchInput" placeholder="Search ...">
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                            <div class="text-center mt-2" style="display:none;">
+                                <p>No Results Found</p>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="text-start height-align">{{ rig.rig_test_description|truncatechars:50 }}</td>
+                    <td class="text-start height-align">{{ rig.data_file_no }}</td>
+                    <td class="text-start height-align">{{ rig.pil_no }}</td>
+                    <td class="text-center" style="min-width:100px">
+                        {% if rig.file_url %}
+                            {% for url in rig.file_url %}
+                                <a href="{{ url }}" target="_blank" class="btn btn-outline-primary btn-sm me-1 mb-1">Attachment</a>
+                            {% endfor %}
+                        {% else %}
+                            No Attachments
+                        {% endif %}
+                    </td>
+                    <td id="action_id" style="line-height:2.3;">
+                        <a href="javascript:void(0);" class="me-2" data-bs-toggle="modal" data-bs-target="#edit_modal_{{ rig.id }}">
+                            <i class="ri-edit-2-fill fs-16 text-primary"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="text-danger" onclick="if(confirm('Are you sure you want to delete this rig test?')){ deleteRigTest('{{ rig.id }}'); }">
+                            <i class="ri-delete-bin-5-fill fs-16"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+          <div class="noDataOpenDiv"></div>
+        </div>
+        <!-- Pagination -->
+        <div id="" class="pagination_container d-flex gap-2 justify-content-end">
+
+        </div>
+        <!-- Pagination End-->
+      </div>
+
+<!-- Add New testrig modals -->
+      <div class="modal fade" id="add_testrig" tabindex="-1" aria-labelledby="edit_modalLabel" aria-modal="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header bg-light">
+              <h6 class="modal-title" id="edit_modalLabel">Add New Test Rig</h6>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form  method="POST" enctype="multipart/form-data" id="submitform">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-6">
+                        <label for="choices-multiple-remove-button" class="form-label">Type of Testing<span
+                            class="text-danger">*</span></label>
+                        <input class="form-control" type="text"  name="type_of_testing" id="testrig_name" placeholder="Enter Type of Testing"
+                              required />
+
+                          <div id="specialcahracters1" style="color: red"></div>
+                          <div id="testrig_name_error" style="color: red"></div>
+                          <p id="edit_exists" class="text-danger"></p>
+                      </div>
+                      <div class="col-6">
+                        <label for="choices-multiple-remove-button" class="form-label">H/W & S/W <span
+                            class="text-danger">*</span></label>
+                        <input class="form-control" type="text"  name="hw_sw" id="testrig_hw_sw" placeholder="Enter Software"
+                              required />
+
+                          <div id="specialcahracters1" style="color: red"></div>
+                          <div id="testrig_name_error" style="color: red"></div>
+                          <p id="edit_exists" class="text-danger"></p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <label for="choices-multiple-remove-button" class="form-label">Version <span
+                            class="text-danger">*</span></label>
+                        <input class="form-control" type="text"  name="version" id="testrig_version" placeholder="Enter Version"
+                              required />
+
+                          <div id="specialcahracters1" style="color: red"></div>
+                          <div id="testrig_name_error" style="color: red"></div>
+                          <p id="edit_exists" class="text-danger"></p>
+                      </div>
+                      <div class="col-6">
+                        <label for="choices-multiple-remove-button" class="form-label">Date <span
+                            class="text-danger">*</span></label>
+                        <input class="form-control" type="Date"  name="rig_date" id="testrig_date"
+                              required />
+
+                          <div id="specialcahracters1" style="color: red"></div>
+                          <div id="testrig_name_error" style="color: red"></div>
+                          <p id="edit_exists" class="text-danger"></p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <label for="choices-multiple-remove-button" class="form-label">PIL No <span
+                            class="text-danger">*</span></label>
+                        <input class="form-control" type="text"  name="pil_no" id="testrig_pil_no" placeholder="Enter PIL No"
+                              required />
+
+                          <div id="specialcahracters1" style="color: red"></div>
+                          <div id="testrig_name_error" style="color: red"></div>
+                          <p id="edit_exists" class="text-danger"></p>
+                      </div>
+                      <div class="col-6">
+                        <label for="choices-multiple-remove-button" class="form-label">Observation <span
+                            class="text-danger">*</span></label>
+                        <input class="form-control" type="text"  name="observation" id="testrig_observation" placeholder="Enter Observation"
+                              required />
+
+                          <div id="specialcahracters1" style="color: red"></div>
+                          <div id="testrig_name_error" style="color: red"></div>
+                          <p id="edit_exists" class="text-danger"></p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <label for="choices-multiple-remove-button" class="form-label">Data File No <span
+                            class="text-danger">*</span></label>
+                        <input class="form-control" type="text"  name="data_file_no" id="testrig_data_file_no" placeholder="Enter Data File No"
+                              required />
+
+                          <div id="specialcahracters1" style="color: red"></div>
+                          <div id="testrig_name_error" style="color: red"></div>
+                          <p id="edit_exists" class="text-danger"></p>
+                      </div>
+                      <div class="col-6">
+                        <label for="attachments" class="form-label color">Upload Attachment (s)</label>
+                        <div class="input-group ">
+                            <input accept=".pdf, .doc, .docx" id="testrig_upload_attachment" type="file"
+                                class="form-control" name="attachments" multiple
+                                aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                            <button class="btn btn-light" id="upload_attachment_id"
+                                style="border-radius: 0 5px 5px 0; border: 0.5px solid rgb(187, 185, 185);"
+                                type="button" onclick="clearinput('testrig_upload_attachment');"><i
+                                    class=" ri-close-line align-bottom me-1"></i></button>
+                        </div>
+                      </div>
+
+                    </div>
+                    <!-- <div class="row">
+                      <div class="col-6">
+                        <label for="choices-multiple-remove-button" class="form-label">Test Rig Name <span
+                            class="text-danger">*</span></label>
+                        <input class="form-control" type="text"  name="name" id="testrig" placeholder="Enter Test Rig Name"
+                              required />
+
+                          <div id="specialcahracters1" style="color: red"></div>
+                          <div id="testrig_name_error" style="color: red"></div>
+                          <p id="edit_exists" class="text-danger"></p>
+                      </div>
+                      <div class="col-6">
+                        <label for="choices-multiple-remove-button" class="form-label">Test Rig Name <span
+                            class="text-danger">*</span></label>
+                        <input class="form-control" type="text"  name="name" id="testrig" placeholder="Enter Test Rig Name"
+                              required />
+
+                          <div id="specialcahracters1" style="color: red"></div>
+                          <div id="testrig_name_error" style="color: red"></div>
+                          <p id="edit_exists" class="text-danger"></p>
+                      </div>
+                    </div> -->
+                  </div>
+                  <div class="col-12">
+                    <div class="mb-3">
+                      <label for="choices-multiple-remove-button" class="form-label">Description </label>
+                      <textarea  id="content" cols="30" rows="10" required ></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="hstack gap-2 justify-content-end">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                      Cancel
+                    </button>
+                    <a  id="sub_btn" class="btn btn-primary">
+                      Save
+                    </a>
+                  </div>
+                </div>
+                <!--end col-->
+              </form>
+            </div>
+            <!--end row-->
+          </div>
+        </div>
+      </div>
+      <!-- delete modal -->
+
+    <div class="modal fade flip" id="deleteRecordModal" tabindex="-1"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="btn-close" id="deleteRecord-close"
+                      data-bs-dismiss="modal" aria-label="Close"
+                      id="btn-close"></button>
+              </div>
+              <div class="modal-body p-5 text-center" id="delete_modal_body">
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+      {% for rig in rig_tests %}
+      <!-- Edit Rig Test Modal  -->
+      <div class="modal fade" id="edit_modal_{{ rig.id }}" tabindex="-1" aria-labelledby="edit_modalLabel" aria-modal="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+              <h5 class="modal-title" id="edit_modalLabel">Edit Rig Test</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mt-2">
+              <form method="POST" enctype="multipart/form-data" id="edit_form_{{ rig.id }}">
+                {% csrf_token %}
+                <div class="row mb-3">
+                  <div class="col-6">
+                    <label for="choices-multiple-remove-button" class="form-label">Type of Testing <span
+                        class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="type_of_testing" value="{{ rig.type_of_testing }}" id="testrig1" placeholder="Enter Type of Testing" required />
+                  </div>
+                  <div class="col-6">
+                    <label for="choices-multiple-remove-button" class="form-label">H/W & S/W <span
+                        class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="hw_sw" value="{{ rig.hw_sw }}" id="testrig_hw_sw" placeholder="Enter Hardware/Software" required />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-6">
+                    <label for="choices-multiple-remove-button" class="form-label">Version <span
+                        class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="version" value="{{ rig.version }}" id="testrig_version" placeholder="Enter Version" required />
+                  </div>
+                  <div class="col-6">
+                    <label for="choices-multiple-remove-button" class="form-label">Date <span
+                        class="text-danger">*</span></label>
+                    <input class="form-control" type="date" name="rig_date" value="{{ rig.rig_date|date:'Y-m-d' }}" id="testrig_date" required />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-6">
+                    <label for="choices-multiple-remove-button" class="form-label">PIL No <span
+                        class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="pil_no" value="{{ rig.pil_no }}" id="testrig_pil_no" placeholder="Enter PIL No" required />
+                  </div>
+                  <div class="col-6">
+                    <label for="choices-multiple-remove-button" class="form-label">Observation <span
+                        class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="observation" value="{{ rig.observation }}" id="testrig_observation" placeholder="Enter Observation" required />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-6">
+                    <label for="choices-multiple-remove-button" class="form-label">Data File No <span
+                        class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="data_file_no" value="{{ rig.data_file_no }}" id="testrig_data_file_no" placeholder="Enter Data File No" required />
+                  </div>
+                  <div class="col-6">
+                    <label for="attachments" class="form-label color">Upload Attachment (s)</label>
+                    <div class="input-group ">
+                        <input accept=".pdf, .doc, .docx" id="testrig_upload_attachment_{{ rig.id }}" type="file"
+                            class="form-control" name="attachments" multiple
+                            aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                        <button class="btn btn-light" id="upload_attachment_id"
+                            style="border-radius: 0 5px 5px 0; border: 0.5px solid rgb(187, 185, 185);"
+                            type="button" onclick="clearinput('testrig_upload_attachment_{{ rig.id }}');"><i
+                                class=" ri-close-line align-bottom me-1"></i></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label for="choices-multiple-remove-button" class="form-label">Description </label>
+                    <textarea name="description" class="form-control" id="" cols="30" rows="10" >{{ rig.rig_test_description }}</textarea>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="hstack gap-2 justify-content-end">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                      Cancel
+                    </button>
+                    <button type="button" id="sub_btn5_{{ rig.id }}" class="btn btn-primary" data-rig-test-id="{{ rig.id }}">
+                      Save
+                    </button>
+                  </div>
+                </div>
+                <!--end col-->
+              </form>
+            </div>
+            <!--end row-->
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block js %}
+<script>
+  var csrfToken = "{{ csrf_token }}";
+  let noDataFoundGif = "{% static 'dashboard/assets/images/notfound3.gif' %}"
+  const rowCount = 10;
+  const delImg = 'static/dashboard/assets/images/deleteBin.gif'
+</script>
+  <script src="{% static 'dashboard/Common_CSS_JS/js/common_functions_all.js' %}"></script>
+<script src="{% static 'dashboard/Pagination_CSS_JS/js/generate_pagination.js' %}"></script>
+<script src="{% static 'dashboard/Common_CSS_JS/js/common_filters.js' %}"></script>
+
+<!-- <script src="{% static 'dashboard/design_requirement/testrig.js' %}"></script> -->
+<!-- <script src="{% static 'dashboard/design_requirement/testrig_filter.js' %}"></script> -->
+
+<script src="{% static 'js/rig_test/pfr_add_rig_test.js' %}"></script>
+<script src="{% static 'js/rig_test/pfr_add_rig_test_api_calls.js' %}"></script>
+
+
+{% endblock %}

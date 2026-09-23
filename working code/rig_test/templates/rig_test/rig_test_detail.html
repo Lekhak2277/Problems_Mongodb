@@ -1,0 +1,394 @@
+{% extends 'dashboard/layout.html' %}
+{% block title %} Rig Test Detail - {{rig_test.type_of_testing}} {% endblock %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'dashboard/Ftp/textarea.css' %}" >
+<!-- Pagination css -->
+<link rel="stylesheet" type="text/css" href="{% static 'dashboard/Pagination_CSS_JS/css/pagination_button.css' %}">
+<!-- Common css -->
+<link rel="stylesheet" type="text/css" href="{% static 'dashboard/Common_CSS_JS/css/common_all.css' %}">
+<style>
+        @media print {
+            @page {
+                /* size: A4; */
+                margin: 6mm;
+            }
+
+            body {
+                margin: 0;
+                width: 100%;
+                font-family: Arial, sans-serif;
+                zoom: 1.35;
+            }
+
+            .print-container {
+                width: 100%;
+                padding: 0;
+            }
+
+            .print-content {
+                display: flex;
+                flex-wrap: wrap;
+                margin: 0;
+            }
+
+            .form-label {
+                font-weight: bold;
+            }
+
+            p {
+                margin: 3px 0;
+            }
+
+            .card-header h6 {
+                /* text-align: center; */
+                font-size: 24px;
+                margin: 0 0 10px 0;
+                /* border-bottom: 1px solid #000; */
+                padding-bottom: 10px;
+            }
+
+            .row {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .col-lg-12 {
+                width: 100%;
+            }
+        }
+
+        .no-print {
+            display: none;
+        }
+        .tdaction {
+            width: 10%;
+        }
+        .text-wrap {
+            white-space: normal !important;
+            word-wrap: break-word; /* For legacy support */
+            word-break: break-word;
+            min-width: 400px; /* Adjust this value as needed */
+        }
+        .tdSr {
+            width: 7%;
+        }
+
+        th {
+            outline: lightgray solid 0.5px !important;
+            border-left: lightgrey solid 0.5px !important;
+            border-right: lightgray solid 0.5px !important;
+            border-top: lightgray solid 0.5px !important;
+        }
+
+        #Update {
+            display: none;
+        }
+
+        #filebtn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #inputfl {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+        }
+</style>
+{% endblock %}
+{% block body %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+<div class="page-content" data-main-id="{{rig_test.id}}" id="pageElement">
+    <div class="container-fluid">
+        <div class="col-lg-12  ">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">Rig Test Details</h4>
+
+                <div class="page-title-right">
+                    <ol class="breadcrumb ">
+                        <li class="breadcrumb-item active"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item ">Rig Test Management</li>
+                        <li class="breadcrumb-item active"><a href="{% url 'pfr_add_test_rig_dashboard' %}">Rig Test Dashboard</a></li>
+                        <li class="breadcrumb-item text-primary fw-semibold"> Rig Test Details</li>
+                    </ol>
+                </div>
+
+            </div>
+            <div class="col-lg-12 ">
+                <div class="">
+                    <div class="tab-content">
+                        <div class="card" id="tanklist">
+                            <div class="card-header border-bottom-dashed">
+                                <div class="row ">
+                                    <div class="col-sm-auto mt-2">
+                                        <div>
+                                            <h5 class="card-title ">Rig Test Details</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="d-flex justify-content-sm-end">
+                                            <button type="button" class="btn btn-light page-title-right btn-sm me-2"
+                                                style="width: 100px; height: 38px; padding-top: 6px;" data-bs-toggle="modal" data-bs-target="#editRigDetailsModal">
+                                                <i class="ri-edit-2-fill align-bottom me-1"></i> Edit
+                                            </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                            <div class="card-body">
+                                <div class="mb-4 mt-2 " id="viewDetails">
+                                    <div class="row g-3">
+                                        <div class="col-3">
+                                            <label for="address" class="form-label fw-bold ">Type of Testing</label>
+                                            <p class="" id="type_of_testing">{{ rig_test.type_of_testing }}</p>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <label for="address" class="form-label fw-bold ">H/W & S/W Version</label>
+                                            <p class="" id="hw_sw">{{ rig_test.hw_sw }}</p>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <label for="address" class="form-label fw-bold">Software Version</label>
+                                            <p class="" id="version">{{ rig_test.version }}</p>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <label for="address" class="form-label fw-bold">Date</label>
+                                            <p class="" id="rig_date">{{ rig_test.rig_date|date:"Y-m-d" }}</p>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <label for="address" class="form-label fw-bold">PIL No</label>
+                                            <p class="" id="pil_no">{{ rig_test.pil_no }}</p>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <label for="address" class="form-label fw-bold">Data File No</label>
+                                            <p class="" id="data_file_no">{{ rig_test.data_file_no }}</p>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <label for="address" class="form-label fw-bold">Observation</label>
+                                            <p class="" id="observation">{{ rig_test.observation }}</p>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <label for="address" class="form-label fw-bold">Description</label>
+                                            <p class="" id="description">{{ rig_test.rig_test_description|safe }}</p>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label for="address" class="form-label fw-bold">Attachments</label>
+                                            <div id="attachment_list">
+                                                {% if rig_test.attachments %}
+                                                    {% for att in rig_test.attachments %}
+                                                         <div class="mb-2">
+                                                             <a href="{{ att.url }}" target="_blank" class="btn btn-outline-primary btn-sm-me-1 mb-1">
+                                                                {{ att.name }}
+                                                             </a>
+                                                          </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <p class="text-muted">No attachments</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rig Test Data Card -->
+            <div class="card mt-3">
+                <div class="card-header border-bottom-dashed">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="card-title mb-0">Rig Test Data</h5>
+                        <button type="button" class="btn btn-primary btn-sm" id="btnAdd" onclick="checkselect1()">
+                            <i class="ri-add-fill align-bottom me-1"></i> Add Rig
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-hover mb-0" id="tblData">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 7%;">Sl. No.</th>
+                                    <th>Type of Rig Test</th>
+                                    <th>Software Version</th>
+                                    <th>PIL No</th>
+                                    <th>File No</th>
+                                    <th style="width: 10%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="viewbooktbody"></tbody>
+                            <tbody id="addrowtbody"></tbody>
+                        </table>
+                    </div>
+                    <div class="px-3" id="noDataOpenDiv"></div>
+
+                    <div class="row bg-white text-center py-3" style="align-items: center; justify-content: center;">
+                        <button type="button" class="btn btn-light me-2" id="cancelbtn" style="width: 150px; display: none;">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btnSaveAll" disabled style="display: none; width: 150px;">Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit child Rig Data -->
+            <div class="modal fade" id="editRigDataModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light">
+                            <h5 class="modal-title">Edit Rig Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form id="editRigDataForm">
+                            <div class="modal-body">
+                                <input type="hidden" id="edit_rig_data_id" name="rig_data_id">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Type of Rig Test <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="edit_type_of_rig_test" name="type_of_rig_test" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Software Version <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="edit_software_version" name="software_version" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">PIL No <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="edit_pil_no" name="pil_no" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">File No <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="edit_file_no" name="file_no" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="updateRigData()">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit parent Rig Test -->
+            <div class="modal fade" id="editRigDetailsModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light">
+                            <h5 class="modal-title">Edit Rig Test Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form id="editRigDetailsForm" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Type of Testing <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="type_of_testing" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">H/W &amp; S/W Version</label>
+                                        <input type="text" class="form-control" name="hw_sw">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Software Version</label>
+                                        <input type="text" class="form-control" name="version">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Date <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="rig_date" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">PIL No</label>
+                                        <input type="text" class="form-control" name="pil_no">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Data File No</label>
+                                        <input type="text" class="form-control" name="data_file_no">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Observation</label>
+                                        <input type="text" class="form-control" name="observation">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Attachments</label>
+                                        <input type="file" class="form-control" name="attachments" multiple>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" rows="5" name="rig_test_description"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="saveRigDetails()">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<!-- #java scripts -->
+{% block js %}
+<script>
+    function printTrigger() {
+    window.print(); // Trigger the print dialog
+     }
+
+
+    let rig_test_id = "{{rig_test.id}}"
+    var csrfToken = "{{ csrf_token }}";
+    // Put django pattern variables here
+    let noDataFoundGif = "{% static 'dashboard/assets/images/notfound3.gif' %}"
+</script>
+
+<script src="{% static 'js/rig_test/rig_test_detail.js' %}"></script>
+<script>
+
+    window.onload = async function() {
+    // Select the dropdown and trigger the load_aircraft function
+    // var aircraftTypeDropdown = document.getElementById("giveme_id");
+    // await load_system1(aircraftTypeDropdown);
+
+    $('.select2').select2();
+    };
+
+
+
+const rowCount = 10;
+const delImg = 'static/dashboard/assets/images/deleteBin.gif'
+
+
+
+</script>
+
+<script src="{% static 'dashboard/Common_CSS_JS/js/validations_all.js' %}"></script>
+
+<!-- common js -->
+<script src="{% static 'dashboard/Common_CSS_JS/js/common_functions_all.js' %}"></script>
+<!-- Common Pagination js -->
+<script src="{% static 'dashboard/Pagination_CSS_JS/js/generate_pagination.js' %}"></script>
+<script src="{% static 'dashboard/Common_CSS_JS/js/common_filters.js' %}"></script>
+
+
+
+<script src="{% static 'js/rig_test/rig_test_detail_filter.js' %}"></script>
+
+
+
+{% endblock %}
