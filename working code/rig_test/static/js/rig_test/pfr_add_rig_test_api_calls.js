@@ -1,3 +1,35 @@
+
+
+// Use the same standard delete confirmation modal used throughout the Design pages.
+function openDeleteConfirmation(message, onConfirm) {
+    const modalBody = $('#delete_modal_body');
+    if (!modalBody.length) {
+        if (typeof onConfirm === 'function') onConfirm();
+        return;
+    }
+
+    const escapedMessage = $('<div>').text(message || '').html();
+    modalBody.html(`
+        <div class="avatar-md mx-auto mb-4">
+            <div class="avatar-title bg-light text-danger fs-36 rounded-circle">
+                <i class="ri-delete-bin-line"></i>
+            </div>
+        </div>
+        <h5 class="mb-3">Delete Confirmation</h5>
+        <p class="text-muted mb-4">${escapedMessage}</p>
+        <div class="hstack gap-2 justify-content-center">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteAction">Delete</button>
+        </div>
+    `);
+
+    $('#confirmDeleteAction').off('click').on('click', function () {
+        $('#deleteRecordModal').modal('hide');
+        if (typeof onConfirm === 'function') onConfirm();
+    });
+    $('#deleteRecordModal').modal('show');
+}
+
 $(document).on('click', '#sub_btn', function (e) {
     e.preventDefault();
 
@@ -148,7 +180,7 @@ $(document).ready(function () {
                                         <a href="javascript:void(0);" class="me-2" data-bs-toggle="modal" data-bs-target="#edit_modal_${doc._id}">
                                             <i class="ri-edit-2-fill fs-16 text-primary"></i>
                                         </a>
-                                        <a href="javascript:void(0);" class="text-danger" onclick="if(confirm('Are you sure you want to delete this rig test?')){ deleteRigTest('${doc._id}'); }">
+                                        <a href="javascript:void(0);" class="text-danger" onclick="openDeleteConfirmation('Are you sure you want to delete this Rig Test?', function(){ deleteRigTest('${doc._id}'); });">
                                             <i class="ri-delete-bin-5-fill fs-16"></i>
                                         </a>
                                     </td>

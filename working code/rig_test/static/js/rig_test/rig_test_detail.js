@@ -269,8 +269,12 @@ $(document).on('click', '.edit-rig-data', function () {
 
 $(document).on('click', '.delete-rig-data', function () {
     const id = $(this).data('id');
-    if (!confirm('Are you sure you want to delete this Rig Data?')) return;
+    openDeleteConfirmation('Are you sure you want to delete this Rig Data?', function () {
+        deleteRigData(id);
+    });
+});
 
+function deleteRigData(id) {
     $.ajax({
         url: '/rig_test/delete-rig-data/' + id + '/',
         type: 'DELETE',
@@ -288,7 +292,7 @@ $(document).on('click', '.delete-rig-data', function () {
             warningAlert(xhr.responseJSON?.message || 'Could not delete Rig Data.');
         }
     });
-});
+}
 
 $('#btnSaveAll').on('click', saveNewRigData);
 $('#cancelbtn').on('click', function (e) {
@@ -297,3 +301,122 @@ $('#cancelbtn').on('click', function (e) {
     $('#btnSaveAll').hide().prop('disabled', true);
     $('#cancelbtn').hide();
 });
+
+
+// ---------------- Attachments ----------------
+function openDeleteConfirmation(message, onConfirm) {
+    const modalBody = $('#delete_modal_body');
+    modalBody.html(`
+        <div class="avatar-md mx-auto mb-4">
+            <div class="avatar-title bg-light text-danger fs-36 rounded-circle">
+                <i class="ri-delete-bin-line"></i>
+            </div>
+        </div>
+        <h5 class="mb-3">Delete Confirmation</h5>
+        <p class="text-muted mb-4">${escapeHtml(message)}</p>
+        <div class="hstack gap-2 justify-content-center">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteAction">Delete</button>
+        </div>
+    `);
+
+    $('#confirmDeleteAction').off('click').on('click', function () {
+        $('#deleteRecordModal').modal('hide');
+        if (typeof onConfirm === 'function') onConfirm();
+    });
+    $('#deleteRecordModal').modal('show');
+}
+
+$(document).on('click', '.edit-attachment', function () {
+    const fileUrl = $(this).data('file-url');
+    const fileName = $(this).data('file-name');
+    $('#edit_attachment_old_url').val(fileUrl);
+    $('#edit_attachment_old_name').val(fileName);
+    $('#edit_attachment_file').val('');
+    $('#editAttachmentModal').modal('show');
+});
+
+$(document).on('click', '#saveAttachmentEdit', function () {
+    const rigTestId = $('#pageElement').data('main-id');
+    const oldUrl = $('#edit_attachment_old_url').val();
+    const fileInput = $('#edit_attachment_file')[0];
+
+    if (!fileInput || !fileInput.files.length) {
+        warningAlert('Please select a replacement file.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('rig_test_id', rigTestId);
+    formData.append('file_url', oldUrl);
+    formData.append('attachment', fileInput.files[0]);
+
+    $('#saveAttachmentEdit').prop('disabled', true);
+    showLoader();
+    $.ajax({
+        url: '/rig_test/edit-attachment/',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: { 'X-CSRFToken': csrf() },
+        success: function (response) {
+            hideLoader();
+            $('#saveAttachmentEdit').prop('disabled', false);
+            if (response.status === 200) {
+                successAlert(response.message || 'Attachment updated successfully.');
+                $('#editAttachmentModal').modal('hide');
+                setTimeout(function () { location.reload(); }, 400);
+            } else {
+                warningAlert(response.message || 'Could not update attachment.');
+            }
+        },
+        error: function (xhr) {
+            hideLoader();
+            $('#saveAttachmentEdit').prop('disabled', false);
+            warningAlert(xhr.responseJSON?.message || 'Could not update attachment.');
+        }
+    });
+});
+
+$(document).on('click', '.delete-attachment', function () {
+    const fileUrl = $(this).data('file-url');
+    const fileName = $(this).data('file-name') || 'this attachment';
+    const row = $(this).closest('.attachment-row');
+
+    openDeleteConfirmation('Are you sure you want to delete "' + fileName + '"?', function () {
+        deleteAttachmentFromDetail(fileUrl, row);
+    });
+});
+
+function deleteAttachmentFromDetail(fileUrl, row) {
+    const formData = new FormData();
+    formData.append('rig_test_id', $('#pageElement').data('main-id'));
+    formData.append('file_url', fileUrl);
+
+    showLoader();
+    $.ajax({
+        url: '/rig_test/delete-attachment/',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: { 'X-CSRFToken': csrf() },
+        success: function (response) {
+            hideLoader();
+            if (response.status === 200) {
+                successAlert(response.message || 'Attachment deleted successfully.');
+                row.remove();
+                if (!$('#attachment_list .attachment-row').length) {
+                    $('#attachment_list').html('<p class="text-muted">No attachments</p>');
+                }
+            } else {
+                warningAlert(response.message || 'Could not delete attachment.');
+            }
+        },
+        error: function (xhr) {
+            hideLoader();
+            warningAlert(xhr.responseJSON?.message || 'Could not delete attachment.');
+        }
+    });
+}

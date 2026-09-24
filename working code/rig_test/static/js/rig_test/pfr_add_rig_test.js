@@ -200,7 +200,7 @@ $(document).on('click', '#sub_btn', function (e) {
           // If you keep a list of rigs in the page – refresh it:
           // fetchRigsList();  // your own function
         } else {
-          alert('Error: ' + (response.message || 'Unknown error.'));
+          warningAlert('Error: ' + (response.message || 'Unknown error.'));
         }
       },
 
@@ -208,7 +208,7 @@ $(document).on('click', '#sub_btn', function (e) {
         hideLoader2('add_testrig_form_submit');
         $('#sub_btn').prop('disabled', false);
         console.error('AJAX error:', err);
-        alert('Something went wrong – please try again.');
+        warningAlert('Something went wrong – please try again.');
       },
     });
   });

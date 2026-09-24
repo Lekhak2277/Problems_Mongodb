@@ -318,7 +318,6 @@ def _required_json_field(data, field_name):
         raise ValueError(f"'{field_name}' is required.")
     return str(value).strip()
 
-
 @api_view(['GET'])
 @login_required(login_url='/user-login/')
 @timing_decorator
@@ -341,9 +340,6 @@ def get_rig_data(request, rig_id):
 
 
 
-
-
-    
 @api_view(['POST'])
 @login_required(login_url='/user-login/')
 @timing_decorator
@@ -381,7 +377,6 @@ def create_rig_data(request):
 
 
 
-    
 @api_view(['POST'])
 @login_required(login_url='/user-login/')
 @timing_decorator
@@ -452,6 +447,78 @@ def delete_rig_test(request, rig_test_id):
 @api_view(['POST'])
 @login_required(login_url='/user-login/')
 @timing_decorator
+def edit_attachment(request):
+    """Replace one existing Rig Test attachment with a newly uploaded file."""
+    try:
+        rig_test_id = request.POST.get('rig_test_id')
+        old_file_url = request.POST.get('file_url')
+        uploaded_file = request.FILES.get('attachment')
+
+        if not rig_test_id or not old_file_url or not uploaded_file:
+            return Response({
+                "status": 400,
+                "message": "rig_test_id, file_url and attachment are required"
+            }, status=400)
+
+        try:
+            rig_oid = ObjectId(rig_test_id)
+        except Exception:
+            return Response({"status": 400, "message": "Invalid Rig Test id"}, status=400)
+
+        rig_doc = collection.find_one({"_id": rig_oid})
+        if not rig_doc:
+            return Response({"status": 404, "message": "Rig Test not found"}, status=404)
+
+        existing_urls = rig_doc.get('file_url', []) or []
+        if old_file_url not in existing_urls:
+            return Response({"status": 404, "message": "Attachment not found"}, status=404)
+
+        # Create the replacement first so an existing attachment is never lost
+        # if the new upload fails.
+        new_attachment = RigTestAttachment(attachment_file=uploaded_file)
+        new_attachment.save()
+        new_url = new_attachment.attachment_file.url
+
+        updated_urls = [new_url if url == old_file_url else url for url in existing_urls]
+        result = collection.update_one(
+            {"_id": rig_oid},
+            {"$set": {"file_url": updated_urls, "updated_date": datetime.utcnow()}}
+        )
+
+        if not result.matched_count:
+            if new_attachment.attachment_file:
+                new_attachment.attachment_file.delete(save=False)
+            new_attachment.delete()
+            return Response({"status": 404, "message": "Rig Test not found"}, status=404)
+
+        # Delete the old stored file only after Mongo has been updated.
+        old_attachment = None
+        for candidate in RigTestAttachment.objects.all():
+            try:
+                if candidate.attachment_file and candidate.attachment_file.url == old_file_url:
+                    old_attachment = candidate
+                    break
+            except Exception:
+                continue
+
+        if old_attachment:
+            if old_attachment.attachment_file:
+                old_attachment.attachment_file.delete(save=False)
+            old_attachment.delete()
+
+        return Response({
+            "status": 200,
+            "message": "Attachment updated successfully",
+            "file_url": new_url,
+            "file_name": new_url.split('/')[-1]
+        })
+    except Exception as exc:
+        return Response({"status": 500, "message": f"Server error: {exc}"}, status=500)
+
+
+@api_view(['POST'])
+@login_required(login_url='/user-login/')
+@timing_decorator
 def delete_attachment(request):
     """
     Delete an attachment from a RigTest record
@@ -471,14 +538,19 @@ def delete_attachment(request):
         )
 
         if result.matched_count:
-            # Now try to delete the attachment record and file
-            # Extract filename from URL to find the attachment
-            filename = file_url.split('/')[-1] if file_url else ''
+            # Remove the exact stored attachment record/file. Do not use a
+            # filename-only contains query because two Rig Tests can upload
+            # files with the same name.
+            attachment = None
+            for candidate in RigTestAttachment.objects.all():
+                try:
+                    if candidate.attachment_file and candidate.attachment_file.url == file_url:
+                        attachment = candidate
+                        break
+                except Exception:
+                    continue
 
-            # Find attachment by filename (since url is a property, not a DB field)
-            attachment = RigTestAttachment.objects.filter(attachment_file__contains=filename).first()
             if attachment:
-                # Delete the actual file from storage
                 if attachment.attachment_file:
                     attachment.attachment_file.delete(save=False)
                 attachment.delete()

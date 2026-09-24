@@ -16,5 +16,7 @@ urlpatterns = [
     path('create-rig-data/', views.create_rig_data, name='create_rig_data'),
     path('update-rig-data/<str:rig_data_id>/', views.update_rig_data, name='update_rig_data'),
     path('delete-rig-data/<str:rig_data_id>/', views.delete_rig_data, name='delete_rig_data'),
+    path('edit-attachment/', views.edit_attachment, name='edit_attachment'),
+    path('delete-attachment/', views.delete_attachment, name='delete_attachment'),
     path('rig_test/export/<str:rig_test_id>/', views.export_rig_test, name='export_rig_test'),
 ]

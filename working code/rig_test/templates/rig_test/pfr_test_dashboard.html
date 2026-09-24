@@ -233,7 +233,7 @@
                         <a href="javascript:void(0);" class="me-2" data-bs-toggle="modal" data-bs-target="#edit_modal_{{ rig.id }}">
                             <i class="ri-edit-2-fill fs-16 text-primary"></i>
                         </a>
-                        <a href="javascript:void(0);" class="text-danger" onclick="if(confirm('Are you sure you want to delete this rig test?')){ deleteRigTest('{{ rig.id }}'); }">
+                        <a href="javascript:void(0);" class="text-danger" onclick="openDeleteConfirmation('Are you sure you want to delete this Rig Test?', function(){ deleteRigTest('{{ rig.id }}'); });">
                             <i class="ri-delete-bin-5-fill fs-16"></i>
                         </a>
                     </td>
@@ -570,49 +570,34 @@
   const delImg = 'static/dashboard/assets/images/deleteBin.gif'
 
   function deleteAttachment(rigTestId, fileUrl) {
-    if (confirm('Are you sure you want to delete this attachment?')) {
-      // Show loader or disable button temporarily
-      const btn = event.target;
-      const originalText = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Deleting...';
-
-      // Create FormData for the DELETE request
+    openDeleteConfirmation('Are you sure you want to delete this attachment?', function () {
       const formData = new FormData();
       formData.append('rig_test_id', rigTestId);
       formData.append('file_url', fileUrl);
 
-      // Send DELETE request to the server
-      fetch('/Rig_test/delete-attachment/', {
-        method: 'POST', // Using POST because Django doesn't handle DELETE with FormData easily
+      showLoader();
+      fetch('/rig_test/delete-attachment/', {
+        method: 'POST',
         body: formData,
-        headers: {
-          'X-CSRFToken': csrfToken
-        }
+        headers: { 'X-CSRFToken': csrfToken }
       })
       .then(response => response.json())
       .then(data => {
+        hideLoader();
         if (data.status === 200) {
-          // Remove the row from the table
-          btn.closest('tr').remove();
-          // Show success message
           successAlert(data.message || 'Attachment deleted successfully');
+          window.location.reload();
         } else {
           warningAlert(data.message || 'Failed to delete attachment');
         }
       })
       .catch(error => {
+        hideLoader();
         console.error('Error:', error);
         warningAlert('An error occurred while deleting the attachment');
-      })
-      .finally(() => {
-        // Re-enable button
-        btn.disabled = false;
-        btn.innerHTML = originalText;
       });
-    }
-  }
-</script>
+    });
+  }</script>
   <script src="{% static 'dashboard/Common_CSS_JS/js/common_functions_all.js' %}"></script>
 <script src="{% static 'dashboard/Pagination_CSS_JS/js/generate_pagination.js' %}"></script>
 <script src="{% static 'dashboard/Common_CSS_JS/js/common_filters.js' %}"></script>

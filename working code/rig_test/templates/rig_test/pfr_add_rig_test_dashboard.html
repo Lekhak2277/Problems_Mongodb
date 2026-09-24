@@ -239,7 +239,7 @@
                         <a href="javascript:void(0);" class="me-2" data-bs-toggle="modal" data-bs-target="#edit_modal_{{ rig.id }}">
                             <i class="ri-edit-2-fill fs-16 text-primary"></i>
                         </a>
-                        <a href="javascript:void(0);" class="text-danger" onclick="if(confirm('Are you sure you want to delete this rig test?')){ deleteRigTest('{{ rig.id }}'); }">
+                        <a href="javascript:void(0);" class="text-danger" onclick="openDeleteConfirmation('Are you sure you want to delete this Rig Test?', function(){ deleteRigTest('{{ rig.id }}'); });">
                             <i class="ri-delete-bin-5-fill fs-16"></i>
                         </a>
                     </td>
